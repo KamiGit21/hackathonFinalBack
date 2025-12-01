@@ -1,0 +1,112 @@
+version: '3.8'
+
+services:
+  # ========== API GATEWAY ==========
+  api-gateway:
+    build:
+      context: ./api-gateway
+      dockerfile: Dockerfile
+    container_name: frog-api-gateway
+    ports:
+      - "8000:8000"
+    environment:
+      - PORT=8000
+      - ASSIGNMENTS_SERVICE_URL=http://assignments-service:8002
+      - EXECUTION_SERVICE_URL=http://execution-service:8003
+      - PLAGIARISM_SERVICE_URL=http://plagiarism-service:8004
+      - LMS_SERVICE_URL=http://lms-integration:8005
+    volumes:
+      - ./api-gateway/app:/app/app
+      - ./api-gateway/secrets:/app/secrets
+    networks:
+      - frog-network
+    restart: unless-stopped
+    depends_on:
+      - assignments-service
+      - execution-service
+      - plagiarism-service
+      - lms-integration
+
+  # ========== ASSIGNMENTS SERVICE ==========
+  assignments-service:
+    build:
+      context: ./assignments-service
+      dockerfile: Dockerfile
+    container_name: frog-assignments-service
+    ports:
+      - "8002:8002"
+    environment:
+      - PORT=8002
+      - SERVICE_NAME=assignments-service
+    volumes:
+      - ./assignments-service/app:/app/app
+      - ./assignments-service/secrets:/app/secrets
+    networks:
+      - frog-network
+    restart: unless-stopped
+
+  # ========== EXECUTION SERVICE ==========
+  execution-service:
+    build:
+      context: ./execution-service
+      dockerfile: Dockerfile
+    container_name: frog-execution-service
+    ports:
+      - "8003:8003"
+    environment:
+      - PORT=8003
+      - SERVICE_NAME=execution-service
+    volumes:
+      - ./execution-service/app:/app/app
+      - ./execution-service/secrets:/app/secrets
+    networks:
+      - frog-network
+    restart: unless-stopped
+
+  # ========== PLAGIARISM SERVICE ==========
+  plagiarism-service:
+    build:
+      context: ./plagiarism-service
+      dockerfile: Dockerfile
+    container_name: frog-plagiarism-service
+    ports:
+      - "8004:8004"
+    environment:
+      - PORT=8004
+      - SERVICE_NAME=plagiarism-service
+      - TURNITIN_API_URL=${TURNITIN_API_URL}
+      - TURNITIN_API_KEY=${TURNITIN_API_KEY}
+    volumes:
+      - ./plagiarism-service/app:/app/app
+      - ./plagiarism-service/secrets:/app/secrets
+    networks:
+      - frog-network
+    restart: unless-stopped
+
+  # ========== LMS INTEGRATION ==========
+  lms-integration:
+    build:
+      context: ./lms-integration
+      dockerfile: Dockerfile
+    container_name: frog-lms-integration
+    ports:
+      - "8005:8005"
+    environment:
+      - PORT=8005
+      - SERVICE_NAME=lms-integration
+      - LMS_TYPE=${LMS_TYPE:-moodle}
+      - LMS_API_URL=${LMS_API_URL}
+      - LMS_API_KEY=${LMS_API_KEY}
+    volumes:
+      - ./lms-integration/app:/app/app
+      - ./lms-integration/secrets:/app/secrets
+    networks:
+      - frog-network
+    restart: unless-stopped
+
+networks:
+  frog-network:
+    driver: bridge
+
+volumes:
+  firebase-data:

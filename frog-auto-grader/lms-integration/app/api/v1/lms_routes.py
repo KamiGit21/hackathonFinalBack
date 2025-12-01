@@ -57,3 +57,6 @@ async def sync_with_lms(assignment_id: int):
         sent_to_lms=True,
         message="Calificaciones preparadas y 'enviadas' al LMS legacy (simulado)."
     )
+
+# app/api/v1/lms_routes.py
+

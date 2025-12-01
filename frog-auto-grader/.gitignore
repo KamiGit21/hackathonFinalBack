@@ -2,6 +2,8 @@
 # 🔐 CREDENCIALES Y SECRETS (CRÍTICO)
 ############################################
 firebase-key.json
+firebasekey.json
+lms-service-key.json
 firebase*.json
 *.pem
 *.key

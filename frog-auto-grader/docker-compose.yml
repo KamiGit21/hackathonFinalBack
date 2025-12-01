@@ -4,13 +4,14 @@ services:
   # ========== API GATEWAY ==========
   api-gateway:
     build:
-      context: ./api-gateway
+      context: ./api-gateway          # asegúrate que el folder se llama igual
       dockerfile: Dockerfile
     container_name: frog-api-gateway
     ports:
       - "8000:8000"
     environment:
       - PORT=8000
+      # 👇 URLs internas usando los puertos que definiste
       - ASSIGNMENTS_SERVICE_URL=http://assignments-service:8002
       - EXECUTION_SERVICE_URL=http://execution-service:8003
       - PLAGIARISM_SERVICE_URL=http://plagiarism-service:8004
@@ -33,14 +34,20 @@ services:
       context: ./assignments-service
       dockerfile: Dockerfile
     container_name: frog-assignments-service
+    # ⬇️ contenedor escucha en 8002 y exponemos 8002
     ports:
       - "8002:8002"
+    env_file:
+      - ./assignments-service/.env
     environment:
       - PORT=8002
       - SERVICE_NAME=assignments-service
+      # ruta dentro del contenedor al key de Firebase
+      - FIREBASE_CREDENTIALS=/app/firebasekey.json
     volumes:
       - ./assignments-service/app:/app/app
-      - ./assignments-service/secrets:/app/secrets
+      # montamos el json de firebase en /app/firebasekey.json
+      - ./assignments-service/firebasekey.json:/app/firebasekey.json:ro
     networks:
       - frog-network
     restart: unless-stopped
@@ -53,6 +60,8 @@ services:
     container_name: frog-execution-service
     ports:
       - "8003:8003"
+    env_file:
+      - ./execution-service/.env
     environment:
       - PORT=8003
       - SERVICE_NAME=execution-service
@@ -71,6 +80,8 @@ services:
     container_name: frog-plagiarism-service
     ports:
       - "8004:8004"
+    env_file:
+      - ./plagiarism-service/.env
     environment:
       - PORT=8004
       - SERVICE_NAME=plagiarism-service
@@ -89,17 +100,25 @@ services:
       context: ./lms-integration
       dockerfile: Dockerfile
     container_name: frog-lms-integration
+    # ⬇️ contenedor escucha en 8005 y exponemos 8005
     ports:
       - "8005:8005"
+    env_file:
+      - ./lms-integration/.env
     environment:
       - PORT=8005
       - SERVICE_NAME=lms-integration
+      # este servicio necesita llamar al assignments-service
+      - ASSIGNMENTS_SERVICE_URL=http://assignments-service:8002
       - LMS_TYPE=${LMS_TYPE:-moodle}
       - LMS_API_URL=${LMS_API_URL}
       - LMS_API_KEY=${LMS_API_KEY}
+      # si en tu código usas una key tipo Firebase / Google:
+      - FIREBASE_CREDENTIALS=/app/lms-service-key.json
     volumes:
       - ./lms-integration/app:/app/app
-      - ./lms-integration/secrets:/app/secrets
+      # montamos la key específica del servicio LMS (si la usas)
+      - ./lms-integration/lms-service-key.json:/app/lms-service-key.json:ro
     networks:
       - frog-network
     restart: unless-stopped
@@ -107,6 +126,3 @@ services:
 networks:
   frog-network:
     driver: bridge
-
-volumes:
-  firebase-data:

@@ -1,0 +1,93 @@
+############################################
+# 🔐 CREDENCIALES Y SECRETS (CRÍTICO)
+############################################
+firebase-key.json
+firebase*.json
+*.pem
+*.key
+.env
+.env.*
+.env.local
+.env.dev
+.env.prod
+
+############################################
+# 🐍 PYTHON
+############################################
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+.pytest_cache/
+.mypy_cache/
+.cache/
+.coverage
+htmlcov/
+
+############################################
+# 📦 VIRTUAL ENVIRONMENTS
+############################################
+venv/
+env/
+.venv/
+.virtualenv/
+
+############################################
+# 🐳 DOCKER
+############################################
+*.log
+docker-compose.override.yml
+
+############################################
+# 🧪 TESTING / DEBUG
+############################################
+logs/
+*.log
+debug.log
+test-results/
+
+############################################
+# 🗄️ FIREBASE / GOOGLE CLOUD
+############################################
+.firebase/
+.firebaserc
+firebase-debug.log
+gcloud-debug.log
+
+############################################
+# 🧠 IDEs / EDITORS
+############################################
+.vscode/
+.idea/
+*.iml
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+############################################
+# 🌐 NODE / FRONTEND (si luego agregas front)
+############################################
+node_modules/
+dist/
+build/
+.next/
+.out/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+############################################
+# 📄 OS
+############################################
+.DS_Store
+Thumbs.db
+
+############################################
+# 📑 GENERADOS / TEMPORALES
+############################################
+*.tmp
+*.swp
+*.bak
+*.old

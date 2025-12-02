@@ -1,6 +1,6 @@
 from pydantic import BaseModel
-from datetime import datetime
 from typing import Optional, List
+from datetime import datetime
 
 
 class SubmissionCreate(BaseModel):
@@ -20,3 +20,8 @@ class SubmissionOut(BaseModel):
 
 class SubmissionList(BaseModel):
     items: List[SubmissionOut]
+
+
+class SubmissionGradeUpdate(BaseModel):
+    score: float
+    reason: Optional[str] = None

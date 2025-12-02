@@ -1,33 +1,6 @@
 version: '3.8'
 
 services:
-  # ========== API GATEWAY ==========
-  api-gateway:
-    build:
-      context: ./api-gateway          # asegúrate que el folder se llama igual
-      dockerfile: Dockerfile
-    container_name: frog-api-gateway
-    ports:
-      - "8000:8000"
-    environment:
-      - PORT=8000
-      # 👇 URLs internas usando los puertos que definiste
-      - ASSIGNMENTS_SERVICE_URL=http://assignments-service:8002
-      - EXECUTION_SERVICE_URL=http://execution-service:8003
-      - PLAGIARISM_SERVICE_URL=http://plagiarism-service:8004
-      - LMS_SERVICE_URL=http://lms-integration:8005
-    volumes:
-      - ./api-gateway/app:/app/app
-      - ./api-gateway/secrets:/app/secrets
-    networks:
-      - frog-network
-    restart: unless-stopped
-    depends_on:
-      - assignments-service
-      - execution-service
-      - plagiarism-service
-      - lms-integration
-
   # ========== ASSIGNMENTS SERVICE ==========
   assignments-service:
     build:
@@ -43,56 +16,15 @@ services:
       - PORT=8002
       - SERVICE_NAME=assignments-service
       # ruta dentro del contenedor al key de Firebase
-      - FIREBASE_CREDENTIALS=/app/firebasekey.json
+      - FIREBASE_CREDENTIALS=/app/assignments-service-key.json
     volumes:
       - ./assignments-service/app:/app/app
       # montamos el json de firebase en /app/firebasekey.json
-      - ./assignments-service/firebasekey.json:/app/firebasekey.json:ro
+      - ./assignments-service/assignments-service-key.json:/app/assignments-service-key.json:ro
     networks:
       - frog-network
     restart: unless-stopped
-
-  # ========== EXECUTION SERVICE ==========
-  execution-service:
-    build:
-      context: ./execution-service
-      dockerfile: Dockerfile
-    container_name: frog-execution-service
-    ports:
-      - "8003:8003"
-    env_file:
-      - ./execution-service/.env
-    environment:
-      - PORT=8003
-      - SERVICE_NAME=execution-service
-    volumes:
-      - ./execution-service/app:/app/app
-      - ./execution-service/secrets:/app/secrets
-    networks:
-      - frog-network
-    restart: unless-stopped
-
-  # ========== PLAGIARISM SERVICE ==========
-  plagiarism-service:
-    build:
-      context: ./plagiarism-service
-      dockerfile: Dockerfile
-    container_name: frog-plagiarism-service
-    ports:
-      - "8004:8004"
-    env_file:
-      - ./plagiarism-service/.env
-    environment:
-      - PORT=8004
-      - SERVICE_NAME=plagiarism-service
-      - TURNITIN_API_URL=${TURNITIN_API_URL}
-      - TURNITIN_API_KEY=${TURNITIN_API_KEY}
-    volumes:
-      - ./plagiarism-service/app:/app/app
-      - ./plagiarism-service/secrets:/app/secrets
-    networks:
-      - frog-network
-    restart: unless-stopped
+  
 
   # ========== LMS INTEGRATION ==========
   lms-integration:

@@ -4,6 +4,7 @@
 firebase-key.json
 firebasekey.json
 lms-service-key.json
+assignments-service-key.json
 firebase*.json
 *.pem
 *.key

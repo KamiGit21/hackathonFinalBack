@@ -3,7 +3,7 @@ from pydantic import BaseSettings
 
 class Settings(BaseSettings):
     SERVICE_NAME: str = "assignments-service"
-    FIREBASE_CREDENTIALS: str = "firebase-key.json"  # ruta al json
+    FIREBASE_CREDENTIALS: str = "assignments-service-key.json"  # ruta al json
 
     ENV: str = "dev"
 

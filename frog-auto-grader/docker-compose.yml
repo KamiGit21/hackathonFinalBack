@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   # ========== API GATEWAY ==========
   api-gateway:
@@ -17,75 +15,71 @@ services:
     networks:
       - frog-network
     restart: unless-stopped
-    # ❌ SIN depends_on
 
-  # ========== ASSIGNMENTS SERVICE ==========
-  assignments-service:
-    build:
-      context: ./assignments-service
-      dockerfile: Dockerfile
-    container_name: frog-assignments-service
-    ports:
-      - "8002:8002"
-    env_file:
-      - ./assignments-service/.env
-    volumes:
-      - ./assignments-service/app:/app/app
-      - ./assignments-service/secrets:/app/secrets
-    networks:
-      - frog-network
-    restart: unless-stopped
+  # ========== COMENTAR TODOS LOS DEMÁS SERVICIOS ==========
+  # assignments-service:
+  #   build:
+  #     context: ./assignments-service
+  #     dockerfile: Dockerfile
+  #   container_name: frog-assignments-service
+  #   ports:
+  #     - "8002:8002"
+  #   env_file:
+  #     - ./assignments-service/.env
+  #   volumes:
+  #     - ./assignments-service/app:/app/app
+  #     - ./assignments-service/secrets:/app/secrets
+  #   networks:
+  #     - frog-network
+  #   restart: unless-stopped
 
-  # ========== EXECUTION SERVICE ==========
-  execution-service:
-    build:
-      context: ./execution-service
-      dockerfile: Dockerfile
-    container_name: frog-execution-service
-    ports:
-      - "8003:8003"
-    env_file:
-      - ./execution-service/.env
-    volumes:
-      - ./execution-service/app:/app/app
-      - ./execution-service/secrets:/app/secrets
-    networks:
-      - frog-network
-    restart: unless-stopped
+  # execution-service:
+  #   build:
+  #     context: ./execution-service
+  #     dockerfile: Dockerfile
+  #   container_name: frog-execution-service
+  #   ports:
+  #     - "8003:8003"
+  #   env_file:
+  #     - ./execution-service/.env
+  #   volumes:
+  #     - ./execution-service/app:/app/app
+  #     - ./execution-service/secrets:/app/secrets
+  #   networks:
+  #     - frog-network
+  #   restart: unless-stopped
 
-  # ========== PLAGIARISM SERVICE ==========
-  plagiarism-service:
-    build:
-      context: ./plagiarism-service
-      dockerfile: Dockerfile
-    container_name: frog-plagiarism-service
-    ports:
-      - "8004:8004"
-    env_file:
-      - ./plagiarism-service/.env
-    volumes:
-      - ./plagiarism-service/app:/app/app
-      - ./plagiarism-service/secrets:/app/secrets
-    networks:
-      - frog-network
-    restart: unless-stopped
+  # plagiarism-service:
+  #   build:
+  #     context: ./plagiarism-service
+  #     dockerfile: Dockerfile
+  #   container_name: frog-plagiarism-service
+  #   ports:
+  #     - "8004:8004"
+  #   env_file:
+  #     - ./plagiarism-service/.env
+  #   volumes:
+  #     - ./plagiarism-service/app:/app/app
+  #     - ./plagiarism-service/secrets:/app/secrets
+  #   networks:
+  #     - frog-network
+  #   restart: unless-stopped
 
-  # ========== LMS INTEGRATION ==========
-  lms-integration:
-    build:
-      context: ./lms-integration
-      dockerfile: Dockerfile
-    container_name: frog-lms-integration
-    ports:
-      - "8005:8005"
-    env_file:
-      - ./lms-integration/.env
-    volumes:
-      - ./lms-integration/app:/app/app
-      - ./lms-integration/secrets:/app/secrets
-    networks:
-      - frog-network
-    restart: unless-stopped
+  # lms-integration:
+  #   build:
+  #     context: ./lms-integration
+  #     dockerfile: Dockerfile
+  #   container_name: frog-lms-integration
+  #   ports:
+  #     - "8005:8005"
+  #   env_file:
+  #     - ./lms-integration/.env
+  #   volumes:
+  #     - ./lms-integration/app:/app/app
+  #     - ./lms-integration/secrets:/app/secrets
+  #   networks:
+  #     - frog-network
+  #   restart: unless-stopped
 
 networks:
   frog-network:

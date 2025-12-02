@@ -75,7 +75,17 @@ services:
     networks:
       - frog-network
     restart: unless-stopped
-
+  plagiarism-service:
+    build: .
+    container_name: plagiarism-service
+    ports:
+      - "8005:8000"
+    environment:
+      - GOOGLE_APPLICATION_CREDENTIALS=/app/serviceAccountKey.json
+    volumes:
+      - ./app/serviceAccountKey.json:/app/serviceAccountKey.json:ro
+    restart: unless-stopped
+    
 networks:
   frog-network:
     driver: bridge

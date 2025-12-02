@@ -7,3 +7,4 @@ authlib==1.2.1
 httpx==0.25.1
 pydantic==2.5.0
 pydantic-settings==2.1.0
+itsdangerous==2.1.2

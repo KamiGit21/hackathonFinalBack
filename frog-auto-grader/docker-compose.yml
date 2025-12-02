@@ -25,6 +25,27 @@ services:
       - frog-network
     restart: unless-stopped
   
+  execution-service:
+    build:
+      context: ./execution-service
+      dockerfile: Dockerfile
+    container_name: frog-execution-service
+    ports:
+      - "8003:8003"
+    env_file:
+      - ./execution-service/.env
+    environment:
+      - PORT=8003
+      - SERVICE_NAME=execution-service
+      # 👇 ruta interna al JSON de Firebase
+      - FIREBASE_CREDENTIALS=/app/secrets/firebase-credentials.json
+    volumes:
+      - ./execution-service/app:/app/app
+      # montamos la carpeta secrets con el json
+      - ./execution-service/secrets:/app/secrets:ro
+    networks:
+      - frog-network
+    restart: unless-stopped
 
   # ========== LMS INTEGRATION ==========
   lms-integration:
